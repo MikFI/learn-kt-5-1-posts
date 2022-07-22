@@ -8,7 +8,7 @@ data class Post(
     //Идентификатор администратора, который опубликовал запись
     //(возвращается только для сообществ при запросе с ключом доступа администратора)
     //Возвращается в записях, опубликованных менее 24 часов назад
-    val createdBy: Int,
+    val createdBy: Int?,
     //Время публикации записи в формате unixtime
     val date: Int,
     //Текст записи
@@ -21,23 +21,27 @@ data class Post(
     val friendsOnly: Boolean,
 
     //Информация о комментариях к записи
-    val comments: Comments,
+    val comments: Comments?,
 
     //Источник материала
-    val copyright: Copyright,
+    val copyright: Copyright?,
 
     //Информация о лайках к записи
     val likes: Likes,
 
     //Информация о репостах записи («Рассказать друзьям»)
-    val reposts: Reposts,
+    val reposts: Reposts?,
 
-    //Число посмотров записи
+    //Число просмотров записи
     val views: Int,
     //Тип записи
     val postType: PostType,
+
+    //Медиавложения записи (фотографии, ссылки и т.п.)
+    val attachments: List<Attachment>?,
+
     //Идентификатор автора, если запись была опубликована от имени сообщества и подписана пользователем
-    val signerId: Int,
+    val signerId: Int?,
     //Может ли текущий пользователь закрепить запись
     val canPin: Boolean,
     //Может ли текущий пользователь удалить запись
@@ -48,14 +52,14 @@ data class Post(
     val isPinned: Boolean,
 
     //Информация о записи VK Donut
-    val donut: Donut,
+    val donut: PostDonut?,
 
     //Информация о том, содержит ли запись отметку «реклама»
     val markedAsAds: Boolean,
     //true, если объект добавлен в закладки у текущего пользователя
     val isFavorite: Boolean,
     //Идентификатор отложенной записи. Это поле возвращается тогда, когда запись стояла на таймере.
-    val postponedId: Int
+    val postponedId: Int?
 )
 
 data class Comments(
@@ -78,25 +82,25 @@ data class Copyright(
     val type: String
 )
 
-data class Likes(
+data class PostLikes(
     //число пользователей, которым понравилась запись
-    val count: Int,
+    override val count: Int,
     //наличие отметки «Мне нравится» от текущего пользователя
-    val userLikes: Boolean,
+    override val userLikes: Boolean,
     //информация о том, может ли текущий пользователь поставить отметку «Мне нравится»
     val canLike: Boolean,
     //информация о том, может ли текущий пользователь сделать репост записи
     val canPublish: Boolean,
-)
+) : Likes
 
-data class Reposts(
+data class PostReposts(
     //число пользователей, скопировавших запись
-    val count: Int,
+    override val count: Int,
     //наличие репоста от текущего пользователя
-    val userReposted: Boolean
-)
+    override val userReposted: Boolean
+) : Reposts
 
-data class Donut(
+data class PostDonut(
     //запись доступна только платным подписчикам VK Donut
     val isDonut: Boolean,
     //время, в течение которого запись будет доступна только платным подписчикам VK Donut
@@ -152,10 +156,10 @@ fun main(args: Array<String>) {
             0, 1, 2, 3, 4, "qq", 5, 6, false,
             Comments(1, true, false, false, false),
             Copyright(2, "www.ru", "aa", "zz"),
-            Likes(3, false, true, true),
-            Reposts(3, false),
-            10, PostType.POST, 2, false, false, false, false,
-            Donut(false, 0, true, EditMode.ALL),
+            PostLikes(3, false, true, true),
+            PostReposts(3, false),
+            10, PostType.POST, null, 2, false, false, false, false,
+            PostDonut(false, 0, true, EditMode.ALL),
             false, false, 2
         )
     )
@@ -164,10 +168,13 @@ fun main(args: Array<String>) {
             0, 22, 33, 44, 55, "xxg", 66, 77, true,
             Comments(40, true, false, false, false),
             Copyright(0, "", "", ""),
-            Likes(23, true, true, true),
-            Reposts(17, true),
-            100, PostType.SUGGEST, 2, false, false, false, false,
-            Donut(false, 0, true, EditMode.ALL),
+            PostLikes(23, true, true, true),
+            PostReposts(17, true),
+            100, PostType.SUGGEST,
+            listOf(AttachmentFile(File(17,22,"bug",2030,"txt","www.ru",1627367475,FileTypes.TEXT)),
+                AttachmentPhoto(Photo(44,22,11,55,"скриншот баги",1645364756,640,480,null))),
+            2, false, false, false, false,
+            PostDonut(false, 0, true, EditMode.ALL),
             false, false, 2
         )
     )
@@ -176,10 +183,10 @@ fun main(args: Array<String>) {
             0, 2345, 2345, 3245, 245, "tgjrtu", 456, 2457, false,
             Comments(123, true, false, false, false),
             Copyright(0, "", "", ""),
-            Likes(54, true, true, true),
-            Reposts(44, true),
-            4573, PostType.REPLY, 2, false, false, false, false,
-            Donut(false, 0, true, EditMode.ALL),
+            PostLikes(54, true, true, true),
+            PostReposts(44, true),
+            4573, PostType.REPLY, null, 2, false, false, false, false,
+            PostDonut(false, 0, true, EditMode.ALL),
             false, false, 2
         )
     )
@@ -188,10 +195,10 @@ fun main(args: Array<String>) {
         123, 123, 123, 123, 123, "qweqwe", 123, 123, false,
         Comments(123, true, false, false, false),
         Copyright(123, "", "", ""),
-        Likes(123, true, true, true),
-        Reposts(123, true),
-        123, PostType.REPLY, 123, false, false, false, false,
-        Donut(false, 123, true, EditMode.ALL),
+        PostLikes(123, true, true, true),
+        PostReposts(123, true),
+        123, PostType.REPLY, null,123, false, false, false, false,
+        PostDonut(false, 123, true, EditMode.ALL),
         false, false, 123
     )
 
