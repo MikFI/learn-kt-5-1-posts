@@ -29,3 +29,8 @@ enum class MusicGenres {
 enum class FileTypes {
     TEXT, ARCHIVE, GIF, IMAGE, AUDIO, VIDEO, EBOOK, UNKNOWN
 }
+
+enum class ReportReasons {
+    SPAM, CHILD_PORN, EXTREMISM, VIOLENCE, NARCOTICS_PROP,
+    ADULT_RATING, INSULTING, SUICIDE_PROP
+}
