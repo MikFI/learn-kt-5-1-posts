@@ -27,7 +27,7 @@ class WallServiceTest {
                     VideoLikes(1,true),
                     VideoReposts(1,false,11,22)
                 ))),2, false, false, false, false,
-                Donut(false, 0, true, EditMode.ALL),
+                PostDonut(false, 0, true, EditMode.ALL),
                 false, false, 2
             )
         )
@@ -46,7 +46,7 @@ class WallServiceTest {
             PostLikes(123, true, true, true),
             PostReposts(123, true),
             123, PostType.REPLY, null, 123, false, false, false, false,
-            Donut(false, 123, true, EditMode.ALL),
+            PostDonut(false, 123, true, EditMode.ALL),
             false, false, 123
         )
 
@@ -66,7 +66,7 @@ class WallServiceTest {
             PostLikes(123, true, true, true),
             PostReposts(123, true),
             123, PostType.REPLY, null, 123, false, false, false, false,
-            Donut(false, 123, true, EditMode.ALL),
+            PostDonut(false, 123, true, EditMode.ALL),
             false, false, 123
         )
 

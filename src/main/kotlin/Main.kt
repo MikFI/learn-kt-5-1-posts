@@ -52,7 +52,7 @@ data class Post(
     val isPinned: Boolean,
 
     //Информация о записи VK Donut
-    val donut: Donut?,
+    val donut: PostDonut?,
 
     //Информация о том, содержит ли запись отметку «реклама»
     val markedAsAds: Boolean,
@@ -100,7 +100,7 @@ data class PostReposts(
     override val userReposted: Boolean
 ) : Reposts
 
-data class Donut(
+data class PostDonut(
     //запись доступна только платным подписчикам VK Donut
     val isDonut: Boolean,
     //время, в течение которого запись будет доступна только платным подписчикам VK Donut
@@ -159,7 +159,7 @@ fun main(args: Array<String>) {
             PostLikes(3, false, true, true),
             PostReposts(3, false),
             10, PostType.POST, null, 2, false, false, false, false,
-            Donut(false, 0, true, EditMode.ALL),
+            PostDonut(false, 0, true, EditMode.ALL),
             false, false, 2
         )
     )
@@ -174,7 +174,7 @@ fun main(args: Array<String>) {
             listOf(AttachmentFile(File(17,22,"bug",2030,"txt","www.ru",1627367475,FileTypes.TEXT)),
                 AttachmentPhoto(Photo(44,22,11,55,"скриншот баги",1645364756,640,480,null))),
             2, false, false, false, false,
-            Donut(false, 0, true, EditMode.ALL),
+            PostDonut(false, 0, true, EditMode.ALL),
             false, false, 2
         )
     )
@@ -186,7 +186,7 @@ fun main(args: Array<String>) {
             PostLikes(54, true, true, true),
             PostReposts(44, true),
             4573, PostType.REPLY, null, 2, false, false, false, false,
-            Donut(false, 0, true, EditMode.ALL),
+            PostDonut(false, 0, true, EditMode.ALL),
             false, false, 2
         )
     )
@@ -198,7 +198,7 @@ fun main(args: Array<String>) {
         PostLikes(123, true, true, true),
         PostReposts(123, true),
         123, PostType.REPLY, null,123, false, false, false, false,
-        Donut(false, 123, true, EditMode.ALL),
+        PostDonut(false, 123, true, EditMode.ALL),
         false, false, 123
     )
 
