@@ -4,12 +4,12 @@ sealed class Attachment(
 )
 
 data class AttachmentVideo(
-    val video:Video
-):Attachment(AttachmentType.VIDEO)
+    val video: Video
+) : Attachment(AttachmentType.VIDEO)
 
 data class AttachmentAudio(
-    val audio:Audio
-):Attachment(AttachmentType.AUDIO)
+    val audio: Audio
+) : Attachment(AttachmentType.AUDIO)
 
 data class AttachmentPhoto(
     val photo: Photo
@@ -20,7 +20,7 @@ data class AttachmentFile(
 ) : Attachment(AttachmentType.FILE)
 
 data class AttachmentSticker(
-    val sticker:Sticker
+    val sticker: Sticker
 ) : Attachment(AttachmentType.STICKER)
 
 data class Video(
@@ -58,11 +58,11 @@ data class Video(
     //Может ли пользователь добавить видеозапись к себе
     val canAdd: Boolean,
     //Поле возвращается, если видеозапись приватная (например, была загружена в личное сообщение), всегда содержит 1
-    val isPrivate: Boolean? = true,
+    val isPrivate: Boolean?,
     //Ключ доступа к объекту
     val accessKey: String,
     //Поле возвращается в том случае, если видеоролик находится в процессе обработки, всегда содержит 1
-    val processing: Boolean? = true,
+    val processing: Boolean?,
     //true, если объект добавлен в закладки у текущего пользователя
     val isFavorite: Boolean,
     //Может ли пользователь комментировать видео
@@ -92,16 +92,16 @@ data class Video(
     //Подписан ли пользователь на автора видео
     val isSubscribed: Boolean,
     //Поле возвращается в том случае, если видео зациклено, всегда содержит 1
-    val repeat: Boolean? = true,
+    val repeat: Boolean?,
     //Тип видеозаписи
     val videoType: VideoType,
     //Баланс донатов в прямой трансляции
     val balance: Int?,
     //Статус прямой трансляции
-    val liveStatus: Boolean,
+    val liveStatus: LiveStatus,
     //Поле возвращается в том случае, если видеозапись является прямой трансляцией, всегда содержит 1.
     //(в этом случае в поле duration содержится значение 0)
-    val live: Boolean? = true,
+    val live: Boolean?,
     //Поле свидетельствует о том, что трансляция скоро начнётся. Для live =1
     val upcoming: Boolean,
     //Количество зрителей прямой трансляции
@@ -136,7 +136,7 @@ data class Audio(
     //Дата добавления в формате Unixtime
     val date: Int,
     //1, если включена опция «Не выводить при поиске». Если опция отключена, поле не возвращается
-    val noSearch: Boolean? = true,
+    val noSearch: Boolean?,
     //1, если аудио в высоком качестве
     val isHQ: Boolean
 )
@@ -189,19 +189,14 @@ data class Sticker(
     //Идентификатор стикера
     val stickerId: Int,
     //Изображения для стикера (с прозрачным фоном)
-    val images: List<StickerCopy>,
+    val images: List<StickerCopy>?,
     //Изображения для стикера (с непрозрачным фоном)
-    val imagesWithBackground: List<StickerCopy>,
+    val imagesWithBackground: List<StickerCopy>?,
     //URL анимации стикера
     val animationUrl: String,
     //Информация о том, доступен ли стикер
     val isAllowed: Boolean
 )
-
-
-
-
-
 
 
 //Изображение обложки видеофайла

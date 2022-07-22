@@ -120,6 +120,8 @@ data class PostDonut(
 object WallService {
     private var posts = emptyArray<Post>()
     private var postId = 1
+    private var comments = emptyArray<Comment>()
+    private var commentId = 1
 
     fun add(post: Post): Post {
         val result = post.copy(id = postId)
@@ -128,15 +130,42 @@ object WallService {
         return result
     }
 
-    fun update(id: Int, newPost: Post): Boolean {
+    fun findPost(id: Int): Int? {
         for ((index, post) in posts.withIndex()) {
             if (post.id == id) {
-                posts[index] =
-                    newPost.copy(id = posts[index].id, ownerId = posts[index].ownerId, date = posts[index].date)
-                return true
+                return index
             }
         }
+        return null
+    }
+
+    fun update(id: Int, newPost: Post): Boolean {
+        val index = findPost(id) ?: -1
+        if (index != -1) {
+            posts[index] = newPost.copy(id = posts[index].id, ownerId = posts[index].ownerId, date = posts[index].date)
+            return true
+        }
         return false
+    }
+
+    fun createComment(postId: Int, comment: Comment): Comment {
+        val index = findPost(postId) ?: -1
+        if (index != -1) {
+            comments += comment.copy(id = commentId, replyToComment = postId)
+            commentId++
+            return comment
+        }
+
+        throw PostNotFoundException(postId)
+    }
+
+    fun reportComment(commentId: Int, reason: ReportReasons): ReportComment {
+        for (comment in comments) {
+            if (comment.id == commentId) {
+                return ReportComment(comment.fromId, commentId, reason)
+            }
+        }
+        throw CommentNotFoundException(commentId)
     }
 
     fun getLastPost(): Post {
@@ -144,13 +173,20 @@ object WallService {
     }
 
     fun clearPosts() {
-        posts = emptyArray<Post>()
+        posts = emptyArray()
         postId = 1
     }
 }
 
 
-fun main(args: Array<String>) {
+fun main() {
+    WallService.createComment(
+        22, Comment(
+            11, 11, 11, "dd",
+            CommentDonut(false, ""), 11, 11, null, null, null
+        )
+    )
+
     WallService.add(
         Post(
             0, 1, 2, 3, 4, "qq", 5, 6, false,
@@ -171,8 +207,10 @@ fun main(args: Array<String>) {
             PostLikes(23, true, true, true),
             PostReposts(17, true),
             100, PostType.SUGGEST,
-            listOf(AttachmentFile(File(17,22,"bug",2030,"txt","www.ru",1627367475,FileTypes.TEXT)),
-                AttachmentPhoto(Photo(44,22,11,55,"скриншот баги",1645364756,640,480,null))),
+            listOf(
+                AttachmentFile(File(17, 22, "bug", 2030, "txt", "www.ru", 1627367475, FileTypes.TEXT)),
+                AttachmentPhoto(Photo(44, 22, 11, 55, "скриншот баги", 1645364756, 640, 480, null))
+            ),
             2, false, false, false, false,
             PostDonut(false, 0, true, EditMode.ALL),
             false, false, 2
@@ -197,7 +235,7 @@ fun main(args: Array<String>) {
         Copyright(123, "", "", ""),
         PostLikes(123, true, true, true),
         PostReposts(123, true),
-        123, PostType.REPLY, null,123, false, false, false, false,
+        123, PostType.REPLY, null, 123, false, false, false, false,
         PostDonut(false, 123, true, EditMode.ALL),
         false, false, 123
     )
